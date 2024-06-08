@@ -49,4 +49,6 @@ Overleaf 用户可直接点击链接使用: [Overleaf 模板链接](https://www.
 
 ## 许可证
 
+SimSun字体（`./SimSun.ttc`）是由北京中易中标电子信息技术有限公司设计的，版权属于中易电子公司（ZHONGYI Electronic Co., 2001年），本仓库用于非商业用途。
+
 其余部分使用 MIT 许可证授权。
