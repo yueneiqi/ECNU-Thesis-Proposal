@@ -6,25 +6,23 @@
  https://opensource.org/licenses/MIT
 -->
 
-# SJTU Thesis Proposal 上海交大开题报告模板
+# ECNU Thesis Proposal 华东师大开题报告模板
 
-本仓库是上海交通大学开题报告 LaTeX（非官方）模板，基于上海交通大学研究生院官网给出的 [word 模板](https://www.gs.sjtu.edu.cn/xzzx/pygl) 制作。
+本仓库是华东师范大学开题报告 LaTeX（非官方）模板，基于仓库 [SJTU Thesis Proposal 上海交大开题报告模板](https://github.com/NemoYuan2008/SJTU-Thesis-Proposal) 和华东师范大学研究生院官网给出的 [word 模板](https://yjsy.ecnu.edu.cn/58/89/c42090a219273/page.htm) 制作。
 
-本模板**仅支持 XeTeX 引擎和 UTF-8 编码，请使用 XeLaTeX 编译！！！**
+2024年更新了新的模版，增加了导师意见一栏，如果使用新版，取消`main.tex`底部的注释即可。
 
-如果你觉得本仓库有用，请点个 star 小星星 :star::star::star: 支持一下 :star_struck:
+本模板**仅支持 XeTeX 引擎和 UTF-8 编码，请使用 XeLaTeX 编译**。
+
+如果你觉得本仓库有用，请点个 star 支持一下。
 
 ## 免责声明
 
 本模板仅为开题报告模板的参考实现，不保证审查老师不提意见。任何由于使用本模板而引起的论文格式审查问题均与本模板作者无关。
 
-**更新**：本模板作者已使用该模板顺利通过开题答辩，请放心食用~
-
 ## 获取方法
 
-点击上方绿色 Code，选择 Download ZIP 下载源码到本地。或者使用 git 克隆本仓库。
-
-Overleaf 用户可直接点击链接使用: [Overleaf 模板链接](https://www.overleaf.com/latex/templates/sjtu-thesis-proposal/wpxfhqvwdbwc)，需注意 Overleaf 上模板的更新速度可能会滞后于在 GitHub 上更新的速度。
+Github 用户点击上方绿色 Code，选择 Download ZIP 下载源码到本地。或者使用 git 克隆本仓库。
 
 ## 使用方法
 
@@ -36,20 +34,21 @@ Overleaf 用户可直接点击链接使用: [Overleaf 模板链接](https://www.
 
 ### Overleaf 用户
 
-直接点击 [Overleaf 模板链接](https://www.overleaf.com/latex/templates/sjtu-thesis-proposal/wpxfhqvwdbwc) 使用，**注意将编译器设置为 XeLaTeX**。
-设置编译器的方法请参见 [Overleaf 官方文档](https://www.overleaf.com/learn/how-to/Changing_compiler)。
+可将从 GitHub 下载下来的压缩包上传至 Overleaf 平台，并将编译器设置为 XeLaTeX。
 
-也可将从 GitHub 下载下来的压缩包上传至 Overleaf 平台。
+设置编译器的方法请参见 [Overleaf 官方文档](https://www.overleaf.com/learn/how-to/Changing_compiler)。
 
 ### 本地 VSCode 用户
 
-安装 LaTeX Workshop 插件，使用 VSCode 打开文件夹，打开 `main.tex`，在边栏中展开 `Build LaTeX project`，选择 `Recipe: latexmk (xelatex)` 进行编译。
+安装 LaTeX Workshop 插件，使用 VSCode 打开文件夹，打开 `main.tex`，选择 `Recipe: latexmk (xelatex)` 进行编译。
 在 VSCode 设置中搜索 `latex-workshop.latex.recipe.default` 并将其改为 `lastUsed` 以便一直使用该选项编译。
-注意，**使用其他选项会导致报错**。
+注意，使用其他选项会导致报错。
 
 ### 从命令行编译
 
-使用 `latexmk -xelatex main` 命令来进行编译。
+使用 `latexmk -xelatex main` 命令来进行编译，可以加入 `-synctex=1` 命令行选项来方便编辑器定位。
+
+如果你熟悉 LaTeX 编译流程也可手动进行编译 `xelatex main && biber main && xelatex main  && xelatex main`，注意文献管理使用的是 `biber` 而不是 `bibtex`。
 
 ## 贡献
 
@@ -57,6 +56,6 @@ Overleaf 用户可直接点击链接使用: [Overleaf 模板链接](https://www.
 
 ## 许可证
 
-SimSun字体（`./SimSun.ttc`）是由北京中易中标电子信息技术有限公司设计的，版权属于中易电子公司（ZHONGYI Electronic Co., 2001年），本仓库用于非商业用途。
+SimSun字体（`SimSun.ttc`）是由北京中易中标电子信息技术有限公司设计的，版权属于中易电子公司（ZHONGYI Electronic Co., 2001年），本仓库用于非商业用途。
 
 其余部分使用 MIT 许可证授权。

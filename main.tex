@@ -6,337 +6,367 @@
 
 \documentclass[a4paper,zihao=-4,AutoFakeBold]{ctexart}
 
-\usepackage{geometry}
+% 实际被 \newgeometry 分为两部分控制，搜索该命令进行修改
+\usepackage[top=2.5cm,bottom=2.5cm,left=2.8cm,right=2.8cm]{geometry}
+\usepackage{fontspec}
+\usepackage[shortlabels]{enumitem}
 \usepackage{amsmath}
 \usepackage{amssymb}
-\usepackage{color}
+\usepackage{titlesec}
 \usepackage{graphicx}
 \usepackage{array}
 \usepackage{makecell}
-\usepackage[style=gb7714-2015]{biblatex}
+\usepackage[tikz]{mdframed}
+% 可使用 style=gb7714-2015 选项来指定参考文献国标样式，但官方模板对此未做要求
+% 使用 sorting=none 选项指定按照文章内引用顺序来排序参考文献
+\usepackage[maxbibnames=9,sorting=none]{biblatex} 
 \addbibresource{ref.bib}
 \usepackage{etoolbox}
 \usepackage[hidelinks]{hyperref}
+\usepackage{zhlipsum}
 
-% 设置页边距
-\geometry{
-    top    = 2.5cm,
-    bottom = 2.5cm,
-    left   = 2.8cm,
-    right  = 2.8cm,
-}
-
-% 使用 Times Roman 西文字体
+% 使用类似 Word 上的伪粗宋体
+\newCJKfontfamily\bsongti{SimSun.ttc}[AutoFakeSlant,AutoFakeBold]
+% 使用类 Times 西文字体
 \setmainfont{texgyretermes}[
-    Extension      = .otf,
+    Extension      = .otf ,
     UprightFont    = *-regular,
     BoldFont       = *-bold,
     ItalicFont     = *-italic,
     BoldItalicFont = *-bolditalic,
 ]
+% 你也可以把上面的字体设置命令去掉，改为下面的 Times New Roman
+% \setmainfont{Times New Roman}
 
-% 定义 ``研究课题来源'' 表格里用到的勾和框
-\newcommand*{\myunchecked}{$\square$\kern.65pt}  % 未打勾的方框
-\newcommand*{\mychecked}{\checkmark}   % 打勾
-
-% 一级标题仿宋加粗、悬挂缩进
-% 二级和三级标题楷书加粗，与正文字体一致
-\ctexset{
-    section / name = {,、},     % 一级标题编号后的顿号
-    section / aftername = {},   % 取消顿号后的间距
-    section / format = \fangsong\bfseries\linespread{1.25}\selectfont,
-    subsection / format = \kaishu\bfseries,
-    subsubsection / format = \kaishu\bfseries,
+% % 绘制 ``研究课题来源'' 表格里用到的勾和框
+% \myunchecked 绘制未打勾的方框
+\newcommand{\myunchecked}{%
+    \tikz[baseline] \draw[semithick] (1pt,1pt) rectangle (6pt,6pt);%
+}
+\NewDocumentCommand{\mychecked}{s}{%
+    \IfBooleanTF{#1}{% \mychecked* 绘制一个稍大的勾
+        \tikz[baseline]{
+            \draw (-5.5pt,5pt) -- (-3.46pt,6pt); 
+            \draw[thick] (-3.46pt,6pt) -- (0,0);
+            \draw (0,0) -- (6.92pt,12pt);
+        }%
+    }{% \mychecked 绘制一个稍小的勾
+        \tikz[baseline]{
+            \draw[semithick] (1pt,2pt) -- (1.66pt,2.66pt); 
+            \draw[thick] (1.66pt,2.66pt) -- (3.66pt,0);
+            \draw[semithick] (3.66pt,0) -- (6pt,6pt);
+        }%
+    }%
 }
 
+% 控制表格的线框粗细
+\def\mymfdlinewidth{0.5pt}
+\def\mymfdsplitlinewidth{0.8pt}
+
+% 一级标题仿宋、左对齐
+\titleformat{\section}[block]{\zihao{-4}\fangsong}{\thesection、}{0pt}{\linespread{1.0}\selectfont}
+% 一级三级小标题楷体，与正文字体一致
+\titleformat*{\subsection}{\kaishu}
+\titleformat*{\subsubsection}{\kaishu}
+
+\newcommand{\splitframe}{
+    \mdfsubtitle[
+        subtitleaboveline=true,
+        subtitleabovelinewidth=\mymfdsplitlinewidth,
+        % subtitleaboveskip=0.5\baselineskip,
+        subtitlebelowskip=0.2\baselineskip,
+        subtitleinneraboveskip=0pt,
+        subtitleinnerbelowskip=0pt,
+    ]{}
+}
 
 \begin{document}
 
 \pagestyle{empty}
 
-\begin{figure}[h]
-    \centering
-    \includegraphics[width=10cm]{figures/sjtu-logo.png}
-\end{figure}
+% 首页的页边距单独设置
+\newgeometry{top=2.5cm,bottom=2.5cm,left=2.45cm,right=2.45cm}
+
+\vspace{-10ex} % 不起作用，Latex会省略掉全文第一个vspace
+\vspace*{11.3ex}  % 启用
 
 \begin{center}
-    \bfseries
     \vspace{-0.5cm}
-    \zihao{1} 研究生学位论文开题报告\par\vspace{18.8pt}
-    \zihao{-3} Graduate Thesis/Dissertation Proposal
-    \vspace{0.5cm}
+    {\zihao{1}\bfseries\bsongti 华东师范大学}\\~\\
+    {\zihao{-3}\bfseries East China Normal University}\\~\\
+    {\zihao{1}\bfseries\bsongti 学位论文开题报告登记表}\\~\\
+    {\zihao{-3}\bfseries Thesis/Dissertation Proposal Form}
+    \vspace{0.4cm}
 \end{center}
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% 填写说明：请在下面表格中填写你的信息，注意事项：
-% 1. 学生类别 Degree Program 中应填写以下四个中的一个
-%       a. 学术型博士生 Academic Doctoral Student
-%       b. 专业型博士生 Professional Doctoral Student
-%       c. 学术型硕士生 Academic Master Student
-%       d. 专业型硕士生 Professional Master Student
-% 2. 学习形式 Study Mode 中应填写以下三个中的一个
-%       a. 全日制 Full-time
-%       b. 非全日制 Part-time
-%       c. 同等学力学生
-% 3. 论文题目如果太长，使用 \\ 手动换行 (见示例)
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{table}[h]
-    \centering
-    \renewcommand{\arraystretch}{1.2}
-    % 左栏中文为楷书加粗四号字，英文为小四加粗；右栏为仿宋小四加下划线
-    \zihao{-4}
-    \begin{tabular}{>{\bfseries\kaishu}l>{\fangsong}p{9.3cm}<{\vspace{8pt}\hrule}}
-        {\zihao{4}学号}~~Student ID
-            & 012345678912\\
-        {\zihao{4}姓名}~~Name
-            & 交通大学\\
-        {\zihao{4}学生类别}~~Degree Program
-            & 学术型博士生 Academic Doctoral Student\\
-        {\zihao{4}学习形式}~~Study Mode
-            & 全日制 Full-time\\
-        {\zihao{4}导师}~~Supervisor(s)
-            & 我的导师\\
-        {\zihao{4}论文题目}~~Thesis Title
-            & \makecell[l]{我的很长很长很长很长很长很长很长很长很长的\\
-                           很厉害的论文题目}\vspace{-5pt}\\
-        {\zihao{4}学院}~~School
-            & 我的学院\\
-        {\zihao{4}专业}~~Major
-            & 我的专业\\
-        {\zihao{4}开题日期}~~Date
-            & 202Y-MM-DD\\
-        {\zihao{4}开题地点}~~Venue
-            & 会议室\\
-    \end{tabular}
-    \vspace{-5cm}   % 防止表格被排到下一页
-\end{table}
-
-
-\clearpage
-
-
-\begin{center}
-    \zihao{-3}
-    \vspace*{0.5cm}
-    {\heiti 填\quad 报\quad 说\quad 明}\par
-    \vspace{0.66cm}
-    {\bfseries Instruction}
-\end{center}
-
-\begin{enumerate}
-    \fangsong
-    \item 校本部研究生的开题报告应通过%
-          \href{http://my.sjtu.edu.cn/}{\color{blue}\underline{数字交大}}%
-          在线提交申请，填写本表并上传系统。
-          特殊情况下经研究生院事先同意，可不上传系统，
-          并使用《上海交通大学研究生论文开题评审表》完成评审。
-          \\[0.5\baselineskip]
-          The application for thesis/dissertation proposal
-          should be submitted online through
-          \href{http://my.sjtu.edu.cn/}{\color{blue}\underline{My SJTU}}.
-          The student shall fill this form and upload it in the system.
-          Under special circumstance,
-          this form does not need to be uploaded
-          and the review can be proceeded with the review form
-          with prior consent from the graduate school.
-
-    \item 开题报告为A4大小，于左侧装订成册。各栏空格不够时，请自行加页。
-          考核前提前一周送交导师、评审专家审阅。
-          \\[0.5\baselineskip]
-          This form should be printed with A4 papers
-          and bound together on the left.
-          If the space left is not enough,
-          please feel free to add extra pages.
-          The print version shall be sent to the supervisor,
-          and the review committee members for review
-          at least one week before the oral presentation.
-
-    \item 博士生导师可以根据博士生学位论文选题情况自行确定是否进行开题查新，
-          博士学位论文开题查新报告应由查新工作站提供。
-          \\[0.5\baselineskip]
-          The supervisor should decide, based on the proposed topics,
-          whether a novelty assessment report is needed or not,
-          which should be conducted by an authorized
-          novelty assessment department.
-
-    \item 开题报告通过后，定稿版开题报告由研究生、导师各存档一份，无需上传系统。
-          \\[0.5\baselineskip]
-          Upon passing the proposal,
-          the final version of this report shall be archived by the
-          graduate student and his/her supervisors for future reference.
-
-    \item 同等学力研究生开题答辩采用会议形式，
-          硕士邀请至少3名相关学科/专业领域具有硕士研究生指导资格的专家。
-          博士邀请5名相关学科/专业领域具有博士研究生指导资格的专家。
-          \\[0.5\baselineskip]
-          The capstone presentation adopts a conference format,
-          and at least three experts with master's degree guidance
-          qualifications in relevant disciplines and professional fields
-          are invited for the master's degree.
-          And five experts with doctoral guidance qualifications
-          in relevant disciplines/professional fields are invited
-          for doctoral guidance.
-\end{enumerate}
-
-\clearpage
-
-
-\pagestyle{plain}
-\setcounter{page}{1}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 填写说明：请在下面表格中填写你的信息，注意事项：
 % 1. 论文题目如果太长，使用 \\ 手动换行 (见示例)
 % 2. 本模板提供了 \mychecked 命令用来打勾，
-%    \myunchecked 命令用来画出未打勾的方框
+%    \myunchecked 命令用来画出未打勾的方框，
+%    你也可以自己使用 LaTeX 各种宏包里提供的打勾和方框命令代替
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{table}[h]
-    \centering
-    \zihao{-4}\fangsong
-    \linespread{1.68}\selectfont   % 与word仔细比对后选取的经验值
-    \begin{tabular}{|p{3.3cm}|p{11cm}|}
-        \hline
-        \makecell[l]{论文题目\\Proposed Title} & 
-        \makecell[l]{
-            我的很长很长很长很长很长很长很长很长很长的\\
-            很厉害的论文题目
-        }\\
-        \hline
-        \makecell[l]{研究课题来源\\Source of Research\\Project} &
-        \makecell[l]{
-            请在合适选项前画 \checkmark~~Please select proper options by ``\checkmark''.\\
-            \mychecked\ 国家自然科学基金课题 NSFC Research Grants\\
-            \myunchecked\ 国家社会科学基金 National Social Science Fund of China\\
-            \mychecked\ 国家重大科研专项 National Key Research Projects\\
-            \myunchecked\ 其它纵向科研课题 Other Governmental Research Grants\\
-            \myunchecked\ 企业横向课题 R\&D Projects from Industry\\
-            \myunchecked\ 自拟课题 Self-proposed Project\\
-            \myunchecked\ 其它 Other\enspace
-                \vtop{\hbox{在此处填写内容} \hbox{\rule[-1.5pt]{8cm}{.25pt}}}\\
-        }\\
-        \hline
+    \renewcommand{\arraystretch}{1.85}
+    % 左栏中文为楷体加粗四号字，英文为小四加粗；右栏为仿宋五号加下划线
+    \zihao{5}
+    \begin{tabular}{>{\bfseries\kaishu}p{5.7cm}l>{\songti}l}
+        {\zihao{4}学号}~~{\zihao{-4}Student No.}
+            & 00111110111 \\\cline{2-2}
+        {\zihao{4}姓名}~~{\zihao{-4}Name}
+            & 师范大学 \\\cline{2-2}
+        {\zihao{4}学生类别}~~{\zihao{-4}Degree Program}
+            & \makecell*[l]{
+            \myunchecked\ 学术学位博士生 Academic Doctoral Student\\
+            \myunchecked\ 专业学位博士生 Professional Doctoral Student\\
+            \myunchecked\ 学术学位硕士生/Academic Master Student\\
+            \mychecked\ 专业学位硕士生/Professional Master Student
+        }\vspace{-1.5ex}\\ % 与官方 word 版仔细比对后选取的经验值
+        {\zihao{4}学习形式}~~{\zihao{-4}Student Mode}
+            & \makecell[l]{
+            \myunchecked\ 全日制/Full-time\\
+            \mychecked\ 非全日制/Part-time
+        }\vspace{-1.5ex}\\ % 与官方 word 版仔细比对后选取的经验值
+        {\zihao{4}导师}~~{\zihao{-4}Supervisor(s)}
+            & 我的导师 \\\cline{2-2}
+        {\zihao{4}论文题目}~~{\zihao{-4}Thesis Title}
+            & \makecell[l]{我很长很长很长很长很长很长很长很长很长的 \\ 
+                            很厉害的论文题目}\\\cline{2-2}
+        {\zihao{4}专业/领域}~~{\zihao{4}Major}
+            & 我的专业 \\\cline{2-2}
+        {\zihao{4}培养单位}~~{\zihao{4}School}
+            & 我的学院 \\\cline{2-2}
     \end{tabular}
+    \vspace{-5cm}   % 防止表格过长被排到下一页
 \end{table}
 
-\vspace{-1.3cm}
+\clearpage
+% 正文的页边距
+\newgeometry{top=2.5cm,bottom=2.5cm,left=2.8cm,right=2.8cm}
 
-% 设置后续正文的字体：楷书、0.5倍段间距
-% 行距倍数 1.75 为与官方 word 版仔细比对后选取的经验值
-\kaishu
-\setlength{\parskip}{0.5\baselineskip}
-\linespread{1.75}\selectfont
 
-% 设置浮动体内的字体为楷书小四号字，与正文一致
-\makeatletter
-\appto{\@floatboxreset}{\kaishu\zihao{-4}}
-\makeatother
+\begin{center}
+    \vspace*{-0.5cm}
+    {\zihao{-3}\heiti 填\quad 写\quad 说\quad 明}\\~\\
+    \vspace*{-0.5ex}
+    {\zihao{-3}\bfseries Instruction}
+\end{center}
 
+\vspace*{0.3ex}
+\setlength{\leftmargini}{21pt}
+\begin{enumerate}[1、]
+    \fangsong
+    \item 开题报告为A4大小，于左侧装订成册。各栏空格不够时，请自行加页。
+          \\[0.5\baselineskip]
+          This form should be printed on A4 paper and bound up on the left. In case the space 
+          left is not enough, please feel free to add extra pages.
+
+    \vspace{3\baselineskip}
+    \vspace{-0.3ex}
+
+    \item 开题报告通过后，分别由研究生、导师、学院各存档一份。
+          \\[0.5\baselineskip]
+          After the dissertation proposal is accepted, three copies of this form should be filed, 
+          one for the student, one for the supervisor, and one for school.
+
+\end{enumerate}
+
+\clearpage
+
+% 正文格式
+\zihao{-4}\fangsong\linespread{1.09}\selectfont % 与官方 word 版仔细比对后选取的经验值
+
+\mdfdefinestyle{mymdfstyle}{
+    everyline=true,
+    linewidth=\mymfdlinewidth,
+    innerleftmargin=4pt,
+    innerrightmargin=4pt,
+    innertopmargin=-15pt,
+    innerbottommargin=-10pt
+}
+\begin{mdframed}[
+    style=mymdfstyle,
+]
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 填写说明：开始撰写你的开题报告。
-% 1. \section 里是官方开题报告模板里的填写要求，已为你准备好。
+% 1. section 里是开题报告模板里的填写要求，已为你准备好。
 % 2. 请接在后面填写你的正文内容，具体请仔细阅读示例和注释。
 % 3. 你可以使用 \subsection 和 \subsubsection 命令来使用小标题
-%    所有小标题都可以使用 \label 打标签，并用 \ref 进行引用
+%    小标题都可以使用 \label 打标签，并用 \ref 进行引用。
+% 4. 表格内的想另起一页使用 \newpage，增加单元格使用 \splitframe
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-
-\section{请综述课题国内外研究进展、现状、挑战与意义，可分节描述。
-    博士生不少于 10,000 汉字，硕士生不少于 5,000 汉字。
-    请在文中标注参考文献。 
-    Please review the frontier, current status, 
-    challenges and significance of the research topic. 
-    The citations should be marked in the context 
-    and listed in order at the end of this section. 
-    No less than 8,000 words for doctoral students 
-    and 4,000 words for master students if written in English.}
-
+\vspace{-0.5ex} % 与官方 word 版仔细比对后选取的经验值
+\section{选题的研究意义及国内外研究现状综述，附参考文献。\newline
+Significance of the research topic, overview of the current research status, and the works cited.}
 
 让我来综述一下课题国内外研究进展、现状、挑战与意义。
 这里要写好多好多字，博士生要写一万字，硕士生要写五千字，
 所以我们要多引用一些文献来达到字数要求。
-让我们引用著名的 SPDZ 协议 \cite{SPDZ}。
-当然我们也可以引用一个中文文献 \cite{ZJSD}。
+让我们引用著名的SPDZ协议\cite{SPDZ}。
+当然我们也可以引用一个中文文献\cite{ZJSD}。
 让我们写一点数学公式 $c^2 = a^2 + b^2$。
+
+你还可以使用二级标题和三级标题，
+并使用\LaTeX 的 \verb|\label| 和 \verb|\ref| 命令进行引用，
+如第\ref{sub}节和第\ref{subsub}节所示。
 
 
 \subsection{二级标题}\label{sub}
 
-你还可以使用二级标题和三级标题，
-并使用 \LaTeX{} 的 \verb|\label| 和 \verb|\ref| 命令进行引用，
-如第 \ref{sub} 节和第 \ref{subsub} 节所示。
-
+% 文字来自《祝福》，以展示排版效果
+旧历的年底毕竟最像年底，村镇上不必说，就在天空中也显出将到新年的气象来。
+灰白色的沉重的晚云中间时时发出闪光，接着一声钝响，是送灶的爆竹；
+近处燃放的可就更强烈了，震耳的大音还没有息，空气里已经散满了幽微的火药香。
+我是正在这一夜回到我的故乡鲁镇的。
 
 
 \subsubsection{三级标题}\label{subsub}
 
-最后要打印出参考文献列表，如下所示。
+虽说故乡，然而已没有家，所以只得暂寓在鲁四老爷的宅子里。
+他是我的本家，比我长一辈，应该称之曰“四叔”，是一个讲理学的老监生。
+他比先前并没有甚么大改变，单是老了些，但也还未留胡子，
+一见面是寒暄，寒暄之后说我“胖了”，说我“胖了”之后即大骂其新党。
+但我知道，这并非借题在骂我：因为他所骂的还是康有为。
+但是，谈话是总不投机的了，于是不多久，我便一个人剩在书房里。
 
+最后要打印出参考文献列表，在列出列表之前，我空了2个空行出来。
 
-\vspace{2\baselineskip}% 让参考文献列表与正文有 2 行的间距
-{%
-    \linespread{1.25}\selectfont    % 参考文献行距小一点
-    参考文献 References: 
+\vspace{2\baselineskip}
+
+{
+\renewcommand{\bibfont}{\small}
+\noindent 参考文献 References: 
     \printbibliography[heading=none]
+
 }
 
+%下面两种方式二选一
+\newpage %另起一页
+% \splitframe %不另起页只分框
 
-\section{课题研究目标、主要研究内容和拟解决的关键问题。 
-    Research objectives, main contents and key issues to be solved.}
+\section{课题研究目标、主要研究内容和拟解决的关键问题。\newline
+    Research objectives, main content and key issues to be solved.}
 
-我的课题研究目标非常明确，主要研究内容非常的主要，拟解决的关键问题非常关键。
+\zhlipsum %删除此行，从这里开始写
 
+%下面两种方式二选一
+\newpage %另起一页
+% \splitframe %不另起页只分框
 
+\vspace{-0.5ex} % 与官方 word 版仔细比对后选取的经验值
+\section{拟采取的研究方法、技术路线、实验方案及其可行性分析。（研究方法涉及到\break
+人体或动物实验的，需首先进行伦理审查，审查通过后，须将人体、动物实验伦\vspace{0.3ex}\break % 与官方 word 版仔细比对后选取的经验值
+理审查意见作为开题报告的一部分，并同时附伦理审查通过批准函）\newline
+Research methods, technical route, experimental scheme to be adopted and its feasibility analysis.}
 
-\section{拟采取的研究方法、研究方案及其可行性分析。
-    Research methods and research scheme to be adopted 
-    and feasibility analysis.}
+\zhlipsum %删除此行，从这里开始写
 
-我要采取特别厉害的研究方法、特别新颖的研究方案。这些方法和方案都非常的可行。
+%下面两种方式二选一
+\newpage %另起一页
+% \splitframe %不另起页只分框
 
+\vspace{-0.5ex} % 与官方 word 版仔细比对后选取的经验值
+\section{选题的创新性或应用性。Novelty or applicability of the proposed topic.}
 
+\zhlipsum %删除此行，从这里开始写
 
-\section{课题的创新点 Novelties of the proposed topic.}
+%下面两种方式二选一
+% \newpage %另起一页
+\splitframe %不另起页只分框
 
-我的课题非常的创新，第一点是他的创新点很多，第二是每一个创新点都非常非常的创新。
+\vspace{-0.5ex} % 与官方 word 版仔细比对后选取的经验值
+\section{论文大纲。Thesis outline.}
 
+\setlist[enumerate]{itemsep=0pt,parsep=0pt,partopsep=0pt,topsep=0pt}
+\setlist[enumerate,1]{label=第\chinese*章,itemindent=20pt,leftmargin=50pt}
+\setlist[enumerate,2]{label=\arabic{enumi}.\arabic*,itemindent=-10pt}
+\setlist[enumerate,3]{label=\arabic{enumi}.\arabic{enumii}.\arabic*,itemindent=-10pt}
 
+\begin{enumerate}
+    \item 引言
+    \item 相关理论与技术
+    \begin{enumerate}
+        \item 二级标题
+            \begin{enumerate}
+                \item 三级标题
+            \end{enumerate}
+    \end{enumerate}
+    \item 系统设计
+    \item 实验
+    \begin{enumerate}
+        \item 实验环境
+        \item 测试结果
+    \end{enumerate}
+    \item 总结与展望
+    \begin{enumerate}
+        \item 工作总结
+        \item 工作展望
+    \end{enumerate}
+\end{enumerate}
 
-\section{计划进度、预期成果 Research schedule, and expected outcomes.}
+\setlist[enumerate]{}
+\setlist[enumerate,1]{}
+\setlist[enumerate,2]{}
+\setlist[enumerate,3]{}
 
-我计划一年内发各种顶级会议，然后再发 Nature 和 Science 这样的期刊，然后获得诺贝尔奖。
-先获得诺贝尔计算机科学奖，然后是诺贝尔密码学奖，最后来个诺贝尔化学奖。
+%下面两种方式二选一
+% \newpage %另起一页
+\splitframe %不另起页只分框
 
+\vspace{-0.5ex} % 与官方 word 版仔细比对后选取的经验值
+\section{研究计划进度、预期成果。Research schedule and expected outcomes.}
 
+\zhlipsum %删除此行，从这里开始写
 
-\section{与本课题有关的工作积累、已有的研究工作成绩。
-    Prior experience and accomplished achievements 
-    related to the proposed topic.}
+%下面两种方式二选一
+% \newpage %另起一页
+\splitframe %不另起页只分框
 
+\vspace{-0.5ex} % 与官方 word 版仔细比对后选取的经验值
+\section{与本课题有关的工作积累、已有的研究工作成绩。Previous work in relation to the proposed topic.}
 
-目前已经积累了很多很多工作了，也取得了非常非常好的工作成绩。
+目前已经积累了很多很多工作了，也取得了非常非常好的工作成绩。 %删除此行，从这里开始写
 
+%下面两种方式二选一
+% \newpage %另起一页
+\splitframe %不另起页只分框
 
-
-
-\vspace{\baselineskip}
-
-% 剩下的所有内容均为仿宋加粗小四号字
-\normalfont\zihao{-4}\bfseries\fangsong
+\vspace{0.7ex} % 与官方 word 版仔细比对后选取的经验值
 \noindent
 本人承诺：开题报告中的内容真实无误，若有不实，愿承担相应的责任和后果。
-I hereby declare and confirm that the details 
-provided in this Form are valid and accurate. 
-If anything untruthful found, 
-I will bear the corresponding liabilities and consequences.
+I hereby declare and affirm that the content provided in this Form is valid and accurate\break
+and that I shall bear the corresponding liabilities and consequences for any untrue\break
+statement found.
 
 \vspace{\baselineskip}
 
 \noindent
-学生签字/Signature of Student： 交通大学
+学生签字/Signature of Student： 
 \hfill              
-日期/Date： 202Y-MM-DD
+日期/Date：202Y-MM-DD
+\vspace{-0.5ex}  % 与官方 word 版仔细比对后选取的经验值
+\\
+
+% 新版请取消下面注释
+% \vspace{-5ex} % 与官方 word 版仔细比对后选取的经验值
+% \splitframe
+% \vspace{0.7ex} % 与官方 word 版仔细比对后选取的经验值
+
+% \noindent
+% 导师意见Comments of Supervisor：
+
+% \vspace{2\baselineskip}
+
+% \noindent
+% 导师签字/Signature of Supervisor： 
+% \hfill              
+% 日期/Date：202Y-MM-DD
+% \vspace{2ex} % 与官方 word 版仔细比对后选取的经验值
+% \\
+
+\end{mdframed}
 
 \end{document}
