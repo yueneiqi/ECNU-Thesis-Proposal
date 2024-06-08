@@ -1,3 +1,11 @@
+<!--
+ Copyright (c) 2023 Boshi Yuan
+ Copyright (c) 2024 yueneiqi
+ 
+ This software is released under the MIT License.
+ https://opensource.org/licenses/MIT
+-->
+
 # SJTU Thesis Proposal 上海交大开题报告模板
 
 本仓库是上海交通大学开题报告 LaTeX（非官方）模板，基于上海交通大学研究生院官网给出的 [word 模板](https://www.gs.sjtu.edu.cn/xzzx/pygl) 制作。
