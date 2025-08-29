@@ -8,7 +8,7 @@
 
 # ECNU Thesis Proposal 华东师大开题报告模板
 
-本仓库是华东师范大学开题报告 LaTeX（非官方）模板，基于仓库 [SJTU Thesis Proposal 上海交大开题报告模板](https://github.com/NemoYuan2008/SJTU-Thesis-Proposal) 和华东师范大学研究生院官网给出的 [word 模板](https://yjsy.ecnu.edu.cn/58/89/c42090a219273/page.htm) 制作。
+本仓库是华东师范大学开题报告 LaTeX（非官方）模板，基于仓库 [SJTU Thesis Proposal 上海交大开题报告模板](https://github.com/NemoYuan2008/SJTU-Thesis-Proposal) 制作。
 
 2024年更新了新的模版，增加了导师意见一栏，如果使用新版，取消`main.tex`底部的注释即可。
 
